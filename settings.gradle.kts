@@ -16,6 +16,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://artifactory.skoda.vwgroup.com/artifactory/gra-maul-gradle-public")
     }
 }
 

@@ -15,15 +15,21 @@ serialization_version = "1.6.3"
 mockkVersion = "1.13.10"
 coroutinesTestVersion = "1.8.1-Beta"
 assertionsVersion = "5.8.1"
+maulVersion = "7.2.1"
+coilVersion = "2.6.0"
 
 [libraries]
+maul-core = { module = "vwg.skoda.maulcompose:core", version.ref = "maulVersion" }
+maul-legacy = { module = "vwg.skoda.maulcompose:legacy", version.ref = "maulVersion" }
+
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-android = { module = "io.insert-koin:koin-android" }
-koin-compose = { module = "io.insert-koin:koin-compose" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose" }
 okHttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttp" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_version" }
+coil = { module = "io.coil-kt:coil-compose", version.ref = "coilVersion" }
 
 junit-core = { group = "junit", name = "junit", version.ref = "junit" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockkVersion" }

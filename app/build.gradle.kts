@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.zarinraim.garage"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -51,6 +51,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.maul.core)
+    implementation(libs.maul.legacy)
+
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
@@ -58,6 +61,7 @@ dependencies {
     implementation(libs.okHttp)
     implementation(libs.retrofit)
     implementation(libs.retrofit.serialization)
+    implementation(libs.coil)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.junit.core)
