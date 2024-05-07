@@ -13,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.zarinraim.garage.Routes
 import com.zarinraim.garage.presentation.AutoOverviewState
 import com.zarinraim.garage.scene.component.VerticalSpacer
 import org.koin.androidx.compose.koinViewModel
@@ -22,10 +24,11 @@ import vwg.skoda.maulcompose.lib.components.MaulText
 import vwg.skoda.maulcompose.lib.foundation.MaulTheme
 
 @Composable
-fun OverviewScreen(viewModel: OverviewViewModel = koinViewModel()) {
+fun OverviewScreen(navigation: NavController, viewModel: OverviewViewModel = koinViewModel()) {
 
     val onCard = { vin: String ->
         viewModel.onCard(vin)
+        navigation.navigate(Routes.DETAIL_SCREEN)
     }
 
     Screen(

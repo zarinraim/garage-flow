@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.serialization)
     implementation(libs.coil)
+    implementation(libs.compose.navigation)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.junit.core)

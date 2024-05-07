@@ -17,6 +17,7 @@ coroutinesTestVersion = "1.8.1-Beta"
 assertionsVersion = "5.8.1"
 maulVersion = "7.2.1"
 coilVersion = "2.6.0"
+composeNavigationVersion = "2.7.7"
 
 [libraries]
 maul-core = { module = "vwg.skoda.maulcompose:core", version.ref = "maulVersion" }
@@ -30,6 +31,7 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_version" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coilVersion" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigationVersion" }
 
 junit-core = { group = "junit", name = "junit", version.ref = "junit" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockkVersion" }

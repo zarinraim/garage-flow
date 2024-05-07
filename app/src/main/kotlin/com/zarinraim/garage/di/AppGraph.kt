@@ -8,6 +8,7 @@ import com.zarinraim.garage.domain.GarageRepository
 import com.zarinraim.garage.domain.GarageUseCase
 import com.zarinraim.garage.domain.SelectedVinRepository
 import com.zarinraim.garage.network.di.NetworkGraph
+import com.zarinraim.garage.scene.DetailViewModel
 import com.zarinraim.garage.scene.OverviewViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
@@ -27,5 +28,6 @@ object AppGraph {
         factoryOf(GarageUseCase::LoadDetail)
 
         viewModelOf(::OverviewViewModel)
+        viewModelOf(::DetailViewModel)
     }
 }
