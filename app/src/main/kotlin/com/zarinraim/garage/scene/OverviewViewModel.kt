@@ -17,14 +17,23 @@ class OverviewViewModel(
 ) : StatefulViewModel<State>(State()) {
 
     init {
-        fetch()
+        fetch(refresh = false)
+    }
+
+    fun onRefresh() {
+        fetch(refresh = true)
     }
 
     fun onCard(vin: String) {
         selectedVinRepository.store(vin)
     }
 
-    private fun fetch() = viewModelScope.launch {
+    private fun fetch(refresh: Boolean) = viewModelScope.launch {
+        state = if (refresh) {
+            state.copy(isRefreshing = true)
+        } else {
+            state.copy(isLoading = true)
+        }
         fetchOverview().fold(
             onSuccess = { autos -> state = autos.asSuccess() },
             onFailure = { throwable -> state = throwable.localizedMessage.asFailure() }
@@ -34,18 +43,21 @@ class OverviewViewModel(
     private fun List<Auto>.asSuccess() = State(
         items = map(AutoOverviewFormat::format),
         isLoading = false,
+        isRefreshing = false,
         error = null
     )
 
     private fun String?.asFailure() = State(
         items = emptyList(),
         isLoading = false,
+        isRefreshing = false,
         error = this ?: "Unknown error"
     )
 
     data class State(
         val items: List<AutoOverviewState> = emptyList(),
         val isLoading: Boolean = false,
+        val isRefreshing: Boolean = false,
         val error: String? = null,
     ) : ViewModelState
 }

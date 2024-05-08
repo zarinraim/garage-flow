@@ -1,14 +1,19 @@
 package com.zarinraim.garage.scene
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -20,6 +25,7 @@ import com.zarinraim.garage.presentation.AutoOverviewState
 import com.zarinraim.garage.scene.component.VerticalSpacer
 import org.koin.androidx.compose.koinViewModel
 import vwg.skoda.maulcompose.lib.components.MaulCard
+import vwg.skoda.maulcompose.lib.components.MaulCircularProgressIndicator
 import vwg.skoda.maulcompose.lib.components.MaulText
 import vwg.skoda.maulcompose.lib.foundation.MaulTheme
 
@@ -33,28 +39,32 @@ fun OverviewScreen(navigation: NavController, viewModel: OverviewViewModel = koi
 
     Screen(
         state = viewModel.states.collectAsState().value,
-        onCard = onCard
+        onCard = onCard,
+        onRefresh = viewModel::onRefresh
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Screen(
     state: OverviewViewModel.State,
     onCard: (String) -> Unit,
+    onRefresh: () -> Unit,
 ) {
-    Scaffold { paddingValues ->
-        when {
-            state.isLoading -> CircularProgressIndicator()
-            state.error != null -> MaulText(
-                text = state.error,
-                style = MaulTheme.typography.header5
-            )
-
-            else -> Content(
-                state = state,
-                modifier = Modifier.padding(paddingValues),
-                onCard = onCard
-            )
+    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+        PullToRefreshBox(
+            isRefreshing = state.isRefreshing,
+            onRefresh = onRefresh,
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            when {
+                state.isLoading -> Spinner()
+                state.error != null -> ErrorPanel(text = state.error)
+                else -> Content(
+                    state = state,
+                    onCard = onCard,
+                )
+            }
         }
     }
 }
@@ -62,11 +72,12 @@ private fun Screen(
 @Composable
 private fun Content(
     state: OverviewViewModel.State,
-    modifier: Modifier = Modifier,
     onCard: (String) -> Unit,
 ) {
     LazyColumn(
-        modifier = modifier.padding(horizontal = MaulTheme.dimensions.spaceS)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = MaulTheme.dimensions.spaceS)
     ) {
         header()
         cards(items = state.items, onCard = onCard)
@@ -105,5 +116,29 @@ private fun AutoCard(auto: AutoOverviewState, onClick: (String) -> Unit) {
             }
             MaulText(text = auto.name, style = MaulTheme.typography.header3)
         }
+    }
+}
+
+@Composable
+private fun Spinner() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        MaulCircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun ErrorPanel(text: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(all = MaulTheme.dimensions.spaceS)
+            .verticalScroll(rememberScrollState()),
+    ) {
+        MaulText(text = "Oops", style = MaulTheme.typography.header2)
+        VerticalSpacer(MaulTheme.dimensions.spaceM)
+        MaulText(text = text, style = MaulTheme.typography.body1)
     }
 }
